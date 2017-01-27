@@ -22,5 +22,21 @@ class QueryBuilder {
 
     }
 
+     public function insert($table, $parameters)
+    {
+        $sql = sprintf(
+            'insert into %s (%s) values (%s)',
+            $table,
+            implode(', ', array_keys($parameters)),
+            ':' . implode(', :', array_keys($parameters))
+        );
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->execute($parameters);
+        } catch (Exception $e) {
+            die('Failed! Do not pass go, Do not collect $200');
+        }
+    }
+
 
 }
